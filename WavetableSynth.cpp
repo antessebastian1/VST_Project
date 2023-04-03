@@ -22,12 +22,7 @@ std::vector<float> WavetableSynth::generateWaveTable(Shape osc1Shape)
         const auto halfLength = (WAVETABLE_LENGTH / 2);
             for (auto i = 0; i < WAVETABLE_LENGTH; ++i) //for all floats in the wavetable (= positions in the wavetable)
             {
-                if (i < halfLength) {
-                    waveTable[i] = i / halfLength;
-                }
-                else {
-                    waveTable[i] = ((i-halfLength) / halfLength) -1;
-                }
+                waveTable[i] = -1.0f + 2.0f*static_cast<float>(i)/ WAVETABLE_LENGTH;
             }
     }
     else if (osc1Shape == Shape::square)
