@@ -22,7 +22,7 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     //boundary border for Gain
     gainBox.setText("Gain");
     gainBox.setColour(gainBox.outlineColourId, juce::Colours::red.withAlpha(0.2f));
-    gainBox.setColour(gainBox.textColourId, juce::Colours::aliceblue);
+    gainBox.setColour(gainBox.textColourId, juce::Colours::red);
     addAndMakeVisible(gainBox);
 
     //gain slider
