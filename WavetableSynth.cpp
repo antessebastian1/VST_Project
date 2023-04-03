@@ -48,6 +48,9 @@ void WavetableSynth::processBlock(juce::AudioBuffer<float>& buffer,
     this->envFreq = envFreq;
     this->envInc += envFreq;
     envelope = envAmp * std::sinf(envInc);
+
+
+
     auto currentSample = 0;
 
     for (const auto midiMetadata : midiMessages) //For all midi messages
@@ -100,7 +103,7 @@ void WavetableSynth::render(juce::AudioBuffer<float>& buffer, int beginSample, i
     {
         if (oscillator.isPlaying()) //if the oscillator is playing
         {
-            oscillator.detuneFrequency(envelope);
+            //oscillator.detuneFrequency(envelope);
             for (auto sample = beginSample; sample < endSample; ++sample) // for all samples of the oscillator
             {
                 firstChannel[sample] += oscillator.getSample(); //add up all samples to the firstChannel

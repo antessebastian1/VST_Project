@@ -36,8 +36,12 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     gainSlider.setColour(gainSlider.trackColourId, juce::Colours::red.withAlpha(0.2f)); //set slider track colour
     addAndMakeVisible(gainSlider);
 
+    gainSliderLabel.setText("Gain", juce::dontSendNotification);
+    gainSliderLabel.setColour(gainSliderLabel.textColourId, juce::Colours::black);
+    addAndMakeVisible(gainSliderLabel);
+
     //boundary border for Envelope
-    envBox.setText("Envelope Amp/Freq");
+    envBox.setText("LFO 1");
     envBox.setColour(envBox.outlineColourId, juce::Colours::red.withAlpha(0.2f));
     envBox.setColour(envBox.textColourId, juce::Colours::red);
     addAndMakeVisible(envBox);
@@ -53,6 +57,10 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     envAmpSlider.setColour(envAmpSlider.trackColourId, juce::Colours::red.withAlpha(0.2f)); //set slider track colour
     addAndMakeVisible(envAmpSlider);
 
+    envAmpSliderLabel.setText("Amp", juce::dontSendNotification);
+    envAmpSliderLabel.setColour(envAmpSliderLabel.textColourId, juce::Colours::black);
+    addAndMakeVisible(envAmpSliderLabel);
+
     //envelope Frequency slider
     envFreqSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     envFreqSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
@@ -63,6 +71,10 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     envFreqSlider.setColour(envFreqSlider.thumbColourId, juce::Colours::red); //Set Knob colour
     envFreqSlider.setColour(envFreqSlider.trackColourId, juce::Colours::red.withAlpha(0.2f)); //set slider track colour
     addAndMakeVisible(envFreqSlider);
+
+    envFreqSliderLabel.setText("Freq", juce::dontSendNotification);
+    envFreqSliderLabel.setColour(envFreqSliderLabel.textColourId, juce::Colours::black);
+    addAndMakeVisible(envFreqSliderLabel);
 
 
     //lowpassHighpass filter
@@ -84,7 +96,7 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
 
 
     addAndMakeVisible(cutoffFreqSliderLabel);
-    cutoffFreqSliderLabel.setText("Cutoff Frequency", juce::dontSendNotification);
+    cutoffFreqSliderLabel.setText("Freq", juce::dontSendNotification);
     cutoffFreqSliderLabel.setColour(cutoffFreqSliderLabel.textColourId, juce::Colours::black);
 
     addAndMakeVisible(highpassButton);
@@ -147,18 +159,25 @@ void WavetableSynthAntesAudioProcessorEditor::resized()
     gainBox.setBounds(leftMargin, topMargin, groupWidth, groupHeight);
     //gain slider
     gainSlider.setBounds(leftMargin + 0.1*groupWidth, topMargin + 0.1*groupHeight, sliderWidth, sliderHeight);
+    //gain label
+    gainSliderLabel.setBounds(leftMargin + 0.1 * groupWidth, topMargin + 0.1 * groupHeight - 20, sliderWidth, 20);
 
     //env box
     envBox.setBounds(leftMargin + 2 * groupWidth, topMargin, groupWidth*2, groupHeight);
     //env Slider
     envAmpSlider.setBounds((leftMargin + 2 * groupWidth) + 0.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
+    envAmpSliderLabel.setBounds((leftMargin + 2 * groupWidth) + 0.1 * groupWidth + 0.5f * sliderWidth - 15, topMargin + 0.1 * groupHeight - 20, sliderWidth, 20);
+
     envFreqSlider.setBounds((leftMargin + 2 * groupWidth) + 1.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
-    
+    envFreqSliderLabel.setBounds((leftMargin + 2 * groupWidth) + 1.1 * groupWidth + 0.5f * sliderWidth - 20, topMargin + 0.1 * groupHeight - 20, sliderWidth, 20);
     //LopassHighpassFilter
     filterBox.setBounds(leftMargin + 5 * groupWidth, topMargin, groupWidth * 2, groupHeight);
-
+    //cutoff slider
     cutoffFreqSlider.setBounds((leftMargin + 5 * groupWidth) + 0.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
+    cutoffFreqSliderLabel.setBounds((leftMargin + 5 * groupWidth) + 0.1 * groupWidth + 0.5f * sliderWidth - 20, topMargin + 0.1 * groupHeight - 20, sliderWidth, 20);
+    //highpass button
     highpassButton.setBounds((leftMargin + 5 * groupWidth) + 1.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
+    highpassButtonLabel.setBounds((leftMargin + 5 * groupWidth) + 1.1 * groupWidth - 40, topMargin + 0.1 * groupHeight - 20 + 0.5*sliderHeight, sliderWidth, 20);
 
 
 

@@ -148,11 +148,13 @@ void WavetableSynthAntesAudioProcessor::processBlock (juce::AudioBuffer<float>& 
 {
     juce::ScopedNoDenormals noDenormals;
 
+    //clear buffer
     buffer.clear();
 
+    //synthesize Sound
     synth.processBlock(buffer, midiMessages, envAmp, envFreq);
 
-    //after synth get audiochannels and multiply their sample by rawVolume
+    //apply Gain
     for (int channel = 0; channel < buffer.getNumChannels(); ++channel)
     {
         auto* channelData = buffer.getWritePointer(channel);
@@ -162,15 +164,14 @@ void WavetableSynthAntesAudioProcessor::processBlock (juce::AudioBuffer<float>& 
         }
     }
 
-
-    //lowpassHighpassFilter
+    //apply lowpassHighpassFilter
     const auto cutoffFreq = cutoffFreqParam->load();
     const auto highpass = *highpassParam < 0.5f ? false : true;
     filter.setCutoffFrequency(cutoffFreq);
     filter.setHighpass(highpass);
     filter.processBlock(buffer, midiMessages);
 
-
+    
 
     //Wave visualization:
     waveViewer.pushBuffer(buffer);

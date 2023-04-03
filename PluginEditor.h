@@ -36,7 +36,7 @@ private:
 
     juce::GroupComponent envBox;
     juce::Slider envAmpSlider;
-    juce::Label envAmpLabel;
+    juce::Label envAmpSliderLabel;
     juce::Slider envFreqSlider;
     juce::Label envFreqSliderLabel;
 
