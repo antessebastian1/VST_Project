@@ -19,9 +19,8 @@ class WavetableSynthAntesAudioProcessorEditor  : public juce::AudioProcessorEdit
 
 {
 public:
-    WavetableSynthAntesAudioProcessorEditor 
-    (WavetableSynthAntesAudioProcessor&, 
-     juce::AudioProcessorValueTreeState& vts);
+    WavetableSynthAntesAudioProcessorEditor (WavetableSynthAntesAudioProcessor&, juce::AudioProcessorValueTreeState& vts);
+
     ~WavetableSynthAntesAudioProcessorEditor() override;
 
     //==============================================================================
