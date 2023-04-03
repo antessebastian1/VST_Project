@@ -12,6 +12,7 @@
 #include "WavetableSynth.h"
 #include "LowpassHighpassFilter.h"
 
+
 //==============================================================================
 /**
 */
@@ -57,12 +58,14 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    void updateOsc1Shape(Shape osc1Shape);
 
     juce::AudioVisualiserComponent waveViewer;
     double rawVolume;
 
     double envAmp;
     double envFreq;
+
 
 private:
     juce::AudioProcessorValueTreeState parameters;

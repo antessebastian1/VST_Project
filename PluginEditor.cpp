@@ -112,7 +112,14 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
 
 
 
+    addAndMakeVisible(shapeEnumLabel);
+    addAndMakeVisible(shapeEnum);
+    shapeEnum.addItem("Sinus",1);
+    shapeEnum.addItem("Saw",2);
+    shapeEnum.addItem("Square",3);
 
+    shapeEnum.onChange = [this] { shapeChanged(); };
+    shapeEnum.setSelectedId(1);
 
 
 
@@ -180,6 +187,11 @@ void WavetableSynthAntesAudioProcessorEditor::resized()
     highpassButtonLabel.setBounds((leftMargin + 5 * groupWidth) + 1.1 * groupWidth - 40, topMargin + 0.1 * groupHeight - 20 + 0.5*sliderHeight, sliderWidth, 20);
 
 
+    shapeEnum.setBounds((leftMargin + 5 * groupWidth) + 3.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
+    shapeEnumLabel.setBounds((leftMargin + 5 * groupWidth) + 1.1 * groupWidth - 40, topMargin + 0.1 * groupHeight - 20 + 0.5 * sliderHeight, sliderWidth, 20);
+
+
+
 
 
     //wave visualizer // on bottom center
@@ -202,5 +214,18 @@ void WavetableSynthAntesAudioProcessorEditor::sliderValueChanged(juce::Slider* s
     if (slider == &envFreqSlider)
     {
         audioProcessor.envFreq = envFreqSlider.getValue();
+    }
+}
+
+void WavetableSynthAntesAudioProcessorEditor::shapeChanged()
+{
+    switch (shapeEnum.getSelectedId())
+    {
+    case 1: audioProcessor.updateOsc1Shape(Shape::sinus);
+        break;
+    case 2: audioProcessor.updateOsc1Shape(Shape::saw);
+        break;
+    case 3: audioProcessor.updateOsc1Shape(Shape::square);
+        break;
     }
 }

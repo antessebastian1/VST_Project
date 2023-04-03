@@ -49,6 +49,9 @@ private:
     std::unique_ptr< juce::AudioProcessorValueTreeState::ButtonAttachment> highpassAttachment;
     juce::Label highpassButtonLabel;
 
+    juce::Label shapeEnumLabel{ {}, "Shape" };
+    juce::ComboBox shapeEnum;
+    void shapeChanged();
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     WavetableSynthAntesAudioProcessor& audioProcessor;

@@ -1,21 +1,54 @@
 #include "WavetableSynth.h"
 
-std::vector<float> WavetableSynth::generateSineWaveTable()
+std::vector<float> WavetableSynth::generateWaveTable(Shape osc1Shape)
 {
     constexpr auto WAVETABLE_LENGTH = 64; //length of wave table
     const auto PI = std::atanf(1.f) * 4; // set PI
-    std::vector<float> sineWaveTable = std::vector<float>(WAVETABLE_LENGTH); //Sinus wave table is a vector (of floats) which length is the wavelength
+    std::vector<float> waveTable = std::vector<float>(WAVETABLE_LENGTH); //Sinus wave table is a vector (of floats) which length is the wavelength
 
-    for (auto i = 0; i < WAVETABLE_LENGTH; ++i) //for all floats in the wavetable (= positions in the wavetable)
+
+    if (osc1Shape == Shape::sinus) {
+            for (auto i = 0; i < WAVETABLE_LENGTH; ++i) //for all floats in the wavetable (= positions in the wavetable)
+            {
+                waveTable[i] =
+                    std::sinf(                    //sinus of:
+                        2 * PI * static_cast<float>(i)       //  2 * PI * wavetablePosition 
+                        /                                    //-----------------------------             
+                        WAVETABLE_LENGTH);                   //         wavelength        
+            }
+    }
+    else if (osc1Shape == Shape::saw)
     {
-        sineWaveTable[i] = 
-            std::sinf(                    //sinus of:
-                2 * PI * static_cast<float>(i)       //  2 * PI * wavetablePosition 
-                /                                    //-----------------------------             
-                WAVETABLE_LENGTH);                   //         wavelength        
+        const auto halfLength = (WAVETABLE_LENGTH / 2);
+            for (auto i = 0; i < WAVETABLE_LENGTH; ++i) //for all floats in the wavetable (= positions in the wavetable)
+            {
+                if (i < halfLength) {
+                    waveTable[i] = i / halfLength;
+                }
+                else {
+                    waveTable[i] = ((i-halfLength) / halfLength) -1;
+                }
+            }
+    }
+    else if (osc1Shape == Shape::square)
+    {
+        const auto halfLength = (WAVETABLE_LENGTH / 2);
+        for (auto i = 0; i < WAVETABLE_LENGTH; ++i) //for all floats in the wavetable (= positions in the wavetable)
+        {
+            if (i < halfLength) {
+                waveTable[i] = 1;
+            }
+            else {
+                waveTable[i] = -1;
+            }
+        }
     }
 
-    return sineWaveTable;
+    
+
+
+
+    return waveTable;
 }
 
 
@@ -24,13 +57,19 @@ std::vector<float> WavetableSynth::generateSineWaveTable()
 //with samples of one period of the sine.
 void WavetableSynth::initializeOscillators()
 {
-    this->oscillators.clear(); //clear oscillators
+    //this->sinOscillators.clear(); //clear oscillators
+    //this->sawOscillators.clear(); //clear oscillators
+    //this->squareOscillators.clear(); //clear oscillators
+    this->osc1.clear();
     constexpr auto OSCILLATOR_COUNT = 128; //number of oscillators
-    const auto sineWaveTable = generateSineWaveTable(); //generate sinus wave table
+    auto waveTable = generateWaveTable(Shape::sinus);
+    const auto sinWaveTable = generateWaveTable(Shape::sinus); //generate sinus wave table
+    const auto sawWaveTable = generateWaveTable(Shape::saw); //generate saw wave table
+    const auto squareWaveTable = generateWaveTable(Shape::square); //generate square wave table
 
     for (auto i = 0; i < OSCILLATOR_COUNT; ++i) //For all Oscilators
     {
-        oscillators.emplace_back(sineWaveTable, sampleRate); //appends new waveTable to the end of oscillators-vector
+        this->osc1.emplace_back(waveTable, sampleRate);
     }
 }
 
@@ -80,16 +119,16 @@ void WavetableSynth::handleMidiEvent(const juce::MidiMessage& midiMessage)
     {
         const auto oscillatorId = midiMessage.getNoteNumber(); //get the number of the node
         const auto frequency = midiNoteNumberToFrequency(oscillatorId); //calculate frequency from noteNumber
-        oscillators[oscillatorId].setFrequency(frequency); //set the frequency of the corresponding oscillator to frequency from notenumber
+        osc1[oscillatorId].setFrequency(frequency); //set the frequency of the corresponding oscillator to frequency from notenumber
     }
     else if (midiMessage.isNoteOff()) //if note off
     {
         const auto oscillatorId = midiMessage.getNoteNumber(); //get the number of the note
-        oscillators[oscillatorId].stop(); //stop corresponding oscillator
+        osc1[oscillatorId].stop(); //stop corresponding oscillator
     }
     else if (midiMessage.isAllNotesOff()) //if all notes are off
     {
-        for (auto& oscillator : oscillators)
+        for (auto& oscillator : osc1)
         {
             oscillator.stop(); //stop all oscillators
         }
@@ -99,7 +138,7 @@ void WavetableSynth::handleMidiEvent(const juce::MidiMessage& midiMessage)
 void WavetableSynth::render(juce::AudioBuffer<float>& buffer, int beginSample, int endSample)
 {
     auto* firstChannel = buffer.getWritePointer(0); //get first outPut Channel
-    for (auto& oscillator : oscillators) //for all oscilators
+    for (auto& oscillator : osc1) //for all oscilators
     {
         if (oscillator.isPlaying()) //if the oscillator is playing
         {
@@ -116,5 +155,14 @@ void WavetableSynth::render(juce::AudioBuffer<float>& buffer, int beginSample, i
     {
         auto* channelData = buffer.getWritePointer(channel);
         std::copy(firstChannel + beginSample, firstChannel + endSample, channelData + beginSample);
+    }
+}
+
+void WavetableSynth::updateOsc1Shape(Shape s) {
+    osc1.clear();
+    auto wavetable = generateWaveTable(s);
+    for (auto i = 0; i < 128; ++i) //For all Oscilators
+    {
+        this->osc1.emplace_back(wavetable, sampleRate);
     }
 }
