@@ -212,3 +212,6 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 void WavetableSynthAntesAudioProcessor::updateOsc1Shape(Shape osc1Shape) {
     synth.updateOsc1Shape(osc1Shape);
 }
+void WavetableSynthAntesAudioProcessor::updateOsc2Shape(Shape osc2Shape) {
+    synth.updateOsc2Shape(osc2Shape);
+}

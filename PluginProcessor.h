@@ -59,6 +59,7 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     void updateOsc1Shape(Shape osc1Shape);
+    void updateOsc2Shape(Shape osc1Shape);
 
     juce::AudioVisualiserComponent waveViewer;
     double rawVolume;

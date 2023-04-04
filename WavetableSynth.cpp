@@ -52,10 +52,9 @@ std::vector<float> WavetableSynth::generateWaveTable(Shape osc1Shape)
 //with samples of one period of the sine.
 void WavetableSynth::initializeOscillators()
 {
-    //this->sinOscillators.clear(); //clear oscillators
-    //this->sawOscillators.clear(); //clear oscillators
-    //this->squareOscillators.clear(); //clear oscillators
+
     this->osc1.clear();
+    this->osc2.clear();
     constexpr auto OSCILLATOR_COUNT = 128; //number of oscillators
     auto waveTable = generateWaveTable(Shape::sinus);
     const auto sinWaveTable = generateWaveTable(Shape::sinus); //generate sinus wave table
@@ -65,6 +64,7 @@ void WavetableSynth::initializeOscillators()
     for (auto i = 0; i < OSCILLATOR_COUNT; ++i) //For all Oscilators
     {
         this->osc1.emplace_back(waveTable, sampleRate);
+        this->osc2.emplace_back(waveTable, sampleRate);
     }
 }
 
@@ -111,19 +111,25 @@ float WavetableSynth::midiNoteNumberToFrequency(const int midiNoteNumber)
 void WavetableSynth::handleMidiEvent(const juce::MidiMessage& midiMessage)
 {
     if (midiMessage.isNoteOn()) //if note on
-    {
+    {   
         const auto oscillatorId = midiMessage.getNoteNumber(); //get the number of the node
         const auto frequency = midiNoteNumberToFrequency(oscillatorId); //calculate frequency from noteNumber
         osc1[oscillatorId].setFrequency(frequency); //set the frequency of the corresponding oscillator to frequency from notenumber
+        osc2[oscillatorId].setFrequency(frequency);
     }
     else if (midiMessage.isNoteOff()) //if note off
     {
         const auto oscillatorId = midiMessage.getNoteNumber(); //get the number of the note
         osc1[oscillatorId].stop(); //stop corresponding oscillator
+        osc2[oscillatorId].stop();
     }
     else if (midiMessage.isAllNotesOff()) //if all notes are off
     {
         for (auto& oscillator : osc1)
+        {
+            oscillator.stop(); //stop all oscillators
+        }
+        for (auto& oscillator : osc2)
         {
             oscillator.stop(); //stop all oscillators
         }
@@ -134,6 +140,18 @@ void WavetableSynth::render(juce::AudioBuffer<float>& buffer, int beginSample, i
 {
     auto* firstChannel = buffer.getWritePointer(0); //get first outPut Channel
     for (auto& oscillator : osc1) //for all oscilators
+    {
+        if (oscillator.isPlaying()) //if the oscillator is playing
+        {
+            //oscillator.detuneFrequency(envelope);
+            for (auto sample = beginSample; sample < endSample; ++sample) // for all samples of the oscillator
+            {
+                firstChannel[sample] += oscillator.getSample(); //add up all samples to the firstChannel
+            }
+        }
+    }
+
+    for (auto& oscillator : osc2) //for all oscilators
     {
         if (oscillator.isPlaying()) //if the oscillator is playing
         {
@@ -159,5 +177,13 @@ void WavetableSynth::updateOsc1Shape(Shape s) {
     for (auto i = 0; i < 128; ++i) //For all Oscilators
     {
         this->osc1.emplace_back(wavetable, sampleRate);
+    }
+}
+void WavetableSynth::updateOsc2Shape(Shape s) {
+    osc2.clear();
+    auto wavetable = generateWaveTable(s);
+    for (auto i = 0; i < 128; ++i) //For all Oscilators
+    {
+        this->osc2.emplace_back(wavetable, sampleRate);
     }
 }

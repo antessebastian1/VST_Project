@@ -112,14 +112,23 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
 
 
 
-    addAndMakeVisible(shapeEnumLabel);
-    addAndMakeVisible(shapeEnum);
-    shapeEnum.addItem("Sinus",1);
-    shapeEnum.addItem("Saw",2);
-    shapeEnum.addItem("Square",3);
+    addAndMakeVisible(shape1EnumLabel);
+    addAndMakeVisible(shape1Enum);
+    shape1Enum.addItem("Sinus",1);
+    shape1Enum.addItem("Saw",2);
+    shape1Enum.addItem("Square",3);
 
-    shapeEnum.onChange = [this] { shapeChanged(); };
-    shapeEnum.setSelectedId(1);
+    shape1Enum.onChange = [this] { osc1ShapeChanged(); };
+    shape1Enum.setSelectedId(1);
+
+    addAndMakeVisible(shape2EnumLabel);
+    addAndMakeVisible(shape2Enum);
+    shape2Enum.addItem("Sinus", 1);
+    shape2Enum.addItem("Saw", 2);
+    shape2Enum.addItem("Square", 3);
+
+    shape2Enum.onChange = [this] { osc2ShapeChanged(); };
+    shape2Enum.setSelectedId(1);
 
 
 
@@ -187,8 +196,10 @@ void WavetableSynthAntesAudioProcessorEditor::resized()
     highpassButtonLabel.setBounds((leftMargin + 5 * groupWidth) + 1.1 * groupWidth - 40, topMargin + 0.1 * groupHeight - 20 + 0.5*sliderHeight, sliderWidth, 20);
 
 
-    shapeEnum.setBounds((leftMargin + 5 * groupWidth) + 3.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
-    shapeEnumLabel.setBounds((leftMargin + 5 * groupWidth) + 1.1 * groupWidth - 40, topMargin + 0.1 * groupHeight - 20 + 0.5 * sliderHeight, sliderWidth, 20);
+    shape1Enum.setBounds((leftMargin + 5 * groupWidth) + 3.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
+    shape1EnumLabel.setBounds((leftMargin + 5 * groupWidth) + 3.1 * groupWidth - 40, topMargin + 0.1 * groupHeight - 20 + 0.5 * sliderHeight, sliderWidth, 20);
+    shape2Enum.setBounds((leftMargin + 5 * groupWidth) + 5.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
+    shape2EnumLabel.setBounds((leftMargin + 5 * groupWidth) + 5.1 * groupWidth - 40, topMargin + 0.1 * groupHeight - 20 + 0.5 * sliderHeight, sliderWidth, 20);
 
 
 
@@ -217,15 +228,28 @@ void WavetableSynthAntesAudioProcessorEditor::sliderValueChanged(juce::Slider* s
     }
 }
 
-void WavetableSynthAntesAudioProcessorEditor::shapeChanged()
+void WavetableSynthAntesAudioProcessorEditor::osc1ShapeChanged()
 {
-    switch (shapeEnum.getSelectedId())
+    switch (shape1Enum.getSelectedId())
     {
     case 1: audioProcessor.updateOsc1Shape(Shape::sinus);
         break;
     case 2: audioProcessor.updateOsc1Shape(Shape::saw);
         break;
     case 3: audioProcessor.updateOsc1Shape(Shape::square);
+        break;
+    }
+}
+
+void WavetableSynthAntesAudioProcessorEditor::osc2ShapeChanged()
+{
+    switch (shape2Enum.getSelectedId())
+    {
+    case 1: audioProcessor.updateOsc2Shape(Shape::sinus);
+        break;
+    case 2: audioProcessor.updateOsc2Shape(Shape::saw);
+        break;
+    case 3: audioProcessor.updateOsc2Shape(Shape::square);
         break;
     }
 }

@@ -18,6 +18,7 @@ public:
     void prepareToPlay(double sampleRate);
     void processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages, double envAmp, double envFreq);
     void updateOsc1Shape(Shape s);
+    void updateOsc2Shape(Shape s);
 
 private:
     static std::vector<float> generateWaveTable(Shape shape);
@@ -32,6 +33,7 @@ private:
     //std::vector<WavetableOscillator> squareOscillators;
 
     std::vector<WavetableOscillator> osc1;
+    std::vector<WavetableOscillator> osc2;
 
     double envAmp;
     double envFreq;
