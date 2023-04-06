@@ -30,6 +30,7 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     shape1Enum.addItem("Sinus",1);
     shape1Enum.addItem("Saw",2);
     shape1Enum.addItem("Square",3);
+    shape1Enum.addItem("Triangle", 4);
     shape1Enum.onChange = [this] { osc1ShapeChanged(); };
     shape1Enum.setSelectedId(1);
 
@@ -51,7 +52,7 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     addAndMakeVisible(osc1OctaveSliderLabel);
     osc1OctaveSliderLabel.setText("Octave", juce::dontSendNotification);
     osc1OctaveSliderLabel.setColour(osc1OctaveSliderLabel.textColourId, juce::Colours::black);
-
+        
     addAndMakeVisible(osc1OctaveSlider);
     osc1OctaveSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     osc1OctaveAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
@@ -72,8 +73,9 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     shape2Enum.addItem("Sinus", 1);
     shape2Enum.addItem("Saw", 2);
     shape2Enum.addItem("Square", 3);
+    shape2Enum.addItem("Triangle", 4);
     shape2Enum.onChange = [this] { osc2ShapeChanged(); };
-    shape2Enum.setSelectedId(1);
+    shape2Enum.setSelectedId(4);
 
     addAndMakeVisible(osc2GainSliderLabel);
     osc2GainSliderLabel.setText("Gain", juce::dontSendNotification);
@@ -257,6 +259,8 @@ void WavetableSynthAntesAudioProcessorEditor::osc1ShapeChanged()
         break;
     case 3: audioProcessor.updateOsc1Shape(Shape::square);
         break;
+    case 4: audioProcessor.updateOsc1Shape(Shape::triangle);
+        break;
     }
 }
 
@@ -269,6 +273,8 @@ void WavetableSynthAntesAudioProcessorEditor::osc2ShapeChanged()
     case 2: audioProcessor.updateOsc2Shape(Shape::saw);
         break;
     case 3: audioProcessor.updateOsc2Shape(Shape::square);
+        break;
+    case 4: audioProcessor.updateOsc2Shape(Shape::triangle);
         break;
     }
 }

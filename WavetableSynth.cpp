@@ -38,6 +38,16 @@ std::vector<float> WavetableSynth::generateWaveTable(Shape osc1Shape)
             }
         }
     }
+    else if (osc1Shape == Shape::triangle)
+    {
+        const auto halfLength = (WAVETABLE_LENGTH / 2);
+        for (auto i = 0; i < WAVETABLE_LENGTH; ++i) //for all floats in the wavetable (= positions in the wavetable)
+        {
+            //waveTable[i] = 1 / halfLength * ((i % WAVETABLE_LENGTH) - halfLength);
+            waveTable[i] = -1.0f + 4.0f / WAVETABLE_LENGTH * abs(( static_cast<float>(i) - WAVETABLE_LENGTH / 4 % WAVETABLE_LENGTH) - WAVETABLE_LENGTH / 2.0f);
+        }
+    }
+    
 
     
 
@@ -57,9 +67,6 @@ void WavetableSynth::initializeOscillators()
     this->osc2.clear();
     constexpr auto OSCILLATOR_COUNT = 128; //number of oscillators
     auto waveTable = generateWaveTable(Shape::sinus);
-    const auto sinWaveTable = generateWaveTable(Shape::sinus); //generate sinus wave table
-    const auto sawWaveTable = generateWaveTable(Shape::saw); //generate saw wave table
-    const auto squareWaveTable = generateWaveTable(Shape::square); //generate square wave table
 
     for (auto i = 0; i < OSCILLATOR_COUNT; ++i) //For all Oscilators
     {

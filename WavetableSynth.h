@@ -28,9 +28,6 @@ private:
     void render(juce::AudioBuffer<float>& buffer, int beginSample, int endSample);
 
     double sampleRate;
-    //std::vector<WavetableOscillator> sinOscillators;
-    //std::vector<WavetableOscillator> sawOscillators;
-    //std::vector<WavetableOscillator> squareOscillators;
 
     std::vector<WavetableOscillator> osc1;
     float osc1Gain;
