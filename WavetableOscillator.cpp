@@ -37,9 +37,13 @@ void WavetableOscillator::detuneFrequency(float deltaFreq)
     indexIncrement = indexIncrement + deltaFreq * static_cast<float>(waveTable.size()) / static_cast<float>(sampleRate);
 }
 
-void WavetableOscillator::setOctave(int octave)
+void WavetableOscillator::setOctaveAndCent(int octave, double cent)
 {
-    indexIncrement = this->frequency * std::powf(2.0f,octave) * static_cast<float>(waveTable.size())
+    indexIncrement = 
+        (
+            pow(this->centRoot, cent)*this->frequency * std::powf(2.0f, octave)
+        
+        )* static_cast<float>(waveTable.size())
         / static_cast<float>(sampleRate);
 }
 

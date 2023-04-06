@@ -39,6 +39,10 @@ private:
     juce::Slider osc1OctaveSlider;
     juce::Label osc1OctaveSliderLabel;
     std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> osc1OctaveAttachment;
+    //cent
+    juce::Slider osc1CentSlider;
+    juce::Label osc1CentSliderLabel;
+    std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> osc1CentAttachment;
     void osc1ShapeChanged();
     
     //osc2
@@ -53,6 +57,10 @@ private:
     juce::Slider osc2OctaveSlider;
     juce::Label osc2OctaveSliderLabel;
     std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> osc2OctaveAttachment;
+    //cent
+    juce::Slider osc2CentSlider;
+    juce::Label osc2CentSliderLabel;
+    std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> osc2CentAttachment;
     void osc2ShapeChanged();
 
     //filter on the right side

@@ -63,6 +63,20 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     osc1OctaveSlider.setColour(osc1OctaveSlider.thumbColourId, juce::Colours::black); //Set Knob colour
     osc1OctaveSlider.setColour(osc1OctaveSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
 
+    //cent
+    addAndMakeVisible(osc1CentSliderLabel);
+    osc1CentSliderLabel.setText("Cent", juce::dontSendNotification);
+    osc1CentSliderLabel.setColour(osc1CentSliderLabel.textColourId, juce::Colours::black);
+
+    addAndMakeVisible(osc1CentSlider);
+    osc1CentSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    osc1CentAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+        vts, "osc1_cent", osc1CentSlider));
+    osc1CentSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    osc1CentSlider.setColour(osc1CentSlider.textBoxTextColourId, juce::Colours::black);
+    osc1CentSlider.setColour(osc1CentSlider.thumbColourId, juce::Colours::black); //Set Knob colour
+    osc1CentSlider.setColour(osc1CentSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
+
 
     //osc2
     addAndMakeVisible(osc2Box);
@@ -105,6 +119,20 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     osc2OctaveSlider.setColour(osc2OctaveSlider.textBoxTextColourId, juce::Colours::black);
     osc2OctaveSlider.setColour(osc2OctaveSlider.thumbColourId, juce::Colours::black); //Set Knob colour
     osc2OctaveSlider.setColour(osc2OctaveSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
+
+    //cent
+    addAndMakeVisible(osc2CentSliderLabel);
+    osc2CentSliderLabel.setText("Cent", juce::dontSendNotification);
+    osc2CentSliderLabel.setColour(osc2CentSliderLabel.textColourId, juce::Colours::black);
+
+    addAndMakeVisible(osc2CentSlider);
+    osc2CentSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    osc2CentAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+        vts, "osc2_cent", osc2CentSlider));
+    osc2CentSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    osc2CentSlider.setColour(osc2CentSlider.textBoxTextColourId, juce::Colours::black);
+    osc2CentSlider.setColour(osc2CentSlider.thumbColourId, juce::Colours::black); //Set Knob colour
+    osc2CentSlider.setColour(osc2CentSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
 
 
 
@@ -217,6 +245,9 @@ void WavetableSynthAntesAudioProcessorEditor::resized()
     //octave slider
     osc1OctaveSlider.setBounds(leftMargin + 1.1 * groupWidth, topMargin + 1.2* sliderWidth + 0.1 * groupHeight, sliderWidth, sliderWidth);
     osc1OctaveSliderLabel.setBounds(leftMargin + 1.1 * groupWidth + 0.5f * sliderWidth - 30, topMargin + 1.2 * sliderWidth + 0.1 * groupHeight - 15, sliderWidth, 20);
+    //cent slider
+    osc1CentSlider.setBounds(leftMargin + 1.1 * groupWidth, topMargin + 2.4 * sliderWidth + 0.1 * groupHeight, sliderWidth, sliderWidth);
+    osc1CentSliderLabel.setBounds(leftMargin + 1.1 * groupWidth + 0.5f * sliderWidth - 30, topMargin + 2.4 * sliderWidth + 0.1 * groupHeight - 15, sliderWidth, 20);
 
     //osc2 Box
     osc2Box.setBounds(leftMargin + 2* groupWidth, topMargin, 2 * groupWidth, groupHeight);
@@ -228,6 +259,9 @@ void WavetableSynthAntesAudioProcessorEditor::resized()
     //octave slider
     osc2OctaveSlider.setBounds(leftMargin + 3.1 * groupWidth, topMargin + 1.2 * sliderWidth + 0.1 * groupHeight, sliderWidth, sliderWidth);
     osc2OctaveSliderLabel.setBounds(leftMargin + 3.1 * groupWidth + 0.5f * sliderWidth - 30, topMargin + 1.2 * sliderWidth + 0.1 * groupHeight - 15, sliderWidth, 20);
+    //cent slider
+    osc2CentSlider.setBounds(leftMargin + 3.1 * groupWidth, topMargin + 2.4 * sliderWidth + 0.1 * groupHeight, sliderWidth, sliderWidth);
+    osc2CentSliderLabel.setBounds(leftMargin + 3.1 * groupWidth + 0.5f * sliderWidth - 30, topMargin + 2.4 * sliderWidth + 0.1 * groupHeight - 15, sliderWidth, 20);
 
 
     //LopassHighpassFilter

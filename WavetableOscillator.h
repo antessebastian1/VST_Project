@@ -12,7 +12,7 @@ public:
 
     float getSample();
     void setFrequency(float frequency);
-    void setOctave(int octave);
+    void setOctaveAndCent(int octave, double cent);
     void detuneFrequency(float deltaFreq);
     void stop();
     bool isPlaying() const;
@@ -25,6 +25,8 @@ private:
     std::vector<float> waveTable;
     double sampleRate;
     float frequency;
+    double centRoot = std::exp(std::log(2) / 1200);
+    double cent = pow(centRoot, 5);
 };
 
 

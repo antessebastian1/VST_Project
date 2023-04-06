@@ -24,8 +24,10 @@ WavetableSynthAntesAudioProcessor::WavetableSynthAntesAudioProcessor()
         { 
             std::make_unique<juce::AudioParameterFloat>("osc1_gain", "Osc 1 Gain", juce::NormalisableRange{0.0f,1.0f,0.01f, 1.0f, false}, 1.0f),
             std::make_unique<juce::AudioParameterFloat>("osc1_octave", "Osc 1 Octave", juce::NormalisableRange{-3.0f,3.0f,1.0f, 1.0f, false}, 0.0f),
+            std::make_unique<juce::AudioParameterFloat>("osc1_cent", "Osc 1 Cent", juce::NormalisableRange{-500.0f,500.0f,1.0f, 1.0f, false}, 0.0f),
             std::make_unique<juce::AudioParameterFloat>("osc2_gain", "Osc 2 Gain", juce::NormalisableRange{0.0f,1.0f,0.01f, 1.0f, false}, 1.0f),
             std::make_unique<juce::AudioParameterFloat>("osc2_octave", "Osc 2 Octave", juce::NormalisableRange{-3.0f,3.0f,1.0f, 1.0f, false}, 0.0f),
+            std::make_unique<juce::AudioParameterFloat>("osc2_cent", "Osc 2 Cent", juce::NormalisableRange{-500.0f,500.0f,1.0f, 1.0f, false}, 0.0f),
             std::make_unique<juce::AudioParameterFloat>("gain", "Gain", juce::NormalisableRange{0.0f,1.0f,0.01f, 1.0f, false}, 1.0f),
             std::make_unique<juce::AudioParameterFloat>("cutoff_frequency", "Cutoff Frequency", juce::NormalisableRange{20.0f,20000.f,0.1f, 0.2f, false}, 500.f),
             std::make_unique<juce::AudioParameterBool>("highpass", "Highpass",false)
@@ -34,8 +36,10 @@ WavetableSynthAntesAudioProcessor::WavetableSynthAntesAudioProcessor()
 {   
     osc1GainParam = parameters.getRawParameterValue("osc1_gain");
     osc1OctaveParam = parameters.getRawParameterValue("osc1_octave");
+    osc1CentParam = parameters.getRawParameterValue("osc1_cent");
     osc2GainParam = parameters.getRawParameterValue("osc2_gain");
     osc2OctaveParam = parameters.getRawParameterValue("osc2_octave");
+    osc2CentParam = parameters.getRawParameterValue("osc2_cent");
     gainParam = parameters.getRawParameterValue("gain");
     cutoffFreqParam = parameters.getRawParameterValue("cutoff_frequency");
     highpassParam = parameters.getRawParameterValue("highpass");
@@ -161,9 +165,11 @@ void WavetableSynthAntesAudioProcessor::processBlock (juce::AudioBuffer<float>& 
     //synthesize Sound
     const auto osc1gain = osc1GainParam->load();
     const auto osc1Octave = osc1OctaveParam->load();
+    const auto osc1Cent = osc1CentParam->load();
     const auto osc2gain = osc2GainParam->load();
     const auto osc2Octave = osc2OctaveParam->load();
-    synth.setParams(osc1gain, osc1Octave, osc2gain, osc2Octave);
+    const auto osc2Cent = osc2CentParam->load();
+    synth.setParams(osc1gain, osc1Octave, osc1Cent, osc2gain, osc2Octave, osc2Cent);
     synth.processBlock(buffer, midiMessages);
 
    

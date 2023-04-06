@@ -42,7 +42,6 @@ std::vector<float> WavetableSynth::generateWaveTable(Shape osc1Shape)
         const auto halfLength = (WAVETABLE_LENGTH / 2);
         for (auto i = 0; i < WAVETABLE_LENGTH; ++i) //for all floats in the wavetable (= positions in the wavetable)
         {
-            //waveTable[i] = 1 / halfLength * ((i % WAVETABLE_LENGTH) - halfLength);
             waveTable[i] = -1.0f + 4.0f / WAVETABLE_LENGTH * abs(( static_cast<float>(i) - WAVETABLE_LENGTH / 4 % WAVETABLE_LENGTH) - WAVETABLE_LENGTH / 2.0f);
         }
     }
@@ -155,7 +154,7 @@ void WavetableSynth::render(juce::AudioBuffer<float>& buffer, int beginSample, i
     {
         if (oscillator.isPlaying()) //if the oscillator is playing
         {   
-            oscillator.setOctave(osc1Octave);
+            oscillator.setOctaveAndCent(osc1Octave, osc1Cent);
             for (auto sample = beginSample; sample < endSample; ++sample) // for all samples of the oscillator
             {
                 firstChannel[sample] += oscillator.getSample() * osc1Gain; //add up all samples to the firstChannel
@@ -167,7 +166,7 @@ void WavetableSynth::render(juce::AudioBuffer<float>& buffer, int beginSample, i
     {
         if (oscillator.isPlaying()) //if the oscillator is playing
         {   
-            oscillator.setOctave(osc2Octave);
+            oscillator.setOctaveAndCent(osc2Octave, osc2Cent);
             for (auto sample = beginSample; sample < endSample; ++sample) // for all samples of the oscillator
             {
                 firstChannel[sample] += oscillator.getSample() * osc2Gain; //add up all samples to the firstChannel
@@ -200,9 +199,11 @@ void WavetableSynth::updateOsc2Shape(Shape s) {
     }
 }
 
-void WavetableSynth::setParams(float osc1Gain, float osc1Octave, float osc2Gain, float osc2Octave) {
+void WavetableSynth::setParams(float osc1Gain, float osc1Octave, float osc1Cent, float osc2Gain, float osc2Octave, float osc2Cent) {
     this->osc1Gain = osc1Gain;
     this->osc1Octave = osc1Octave;
+    this->osc1Cent = osc1Cent;
     this->osc2Gain = osc2Gain;
     this->osc2Octave = osc2Octave;
+    this->osc2Cent = osc2Cent;
 }

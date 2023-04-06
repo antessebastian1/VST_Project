@@ -70,9 +70,11 @@ private:
     //synth
     std::atomic<float>* osc1GainParam = nullptr;
     std::atomic<float>* osc1OctaveParam = nullptr;
+    std::atomic<float>* osc1CentParam = nullptr;
     std::atomic<float>* osc2GainParam = nullptr;
     std::atomic<float>* osc2OctaveParam = nullptr;
-    
+    std::atomic<float>* osc2CentParam = nullptr;
+        
     //filter
     std::atomic<float>* cutoffFreqParam = nullptr;
     std::atomic<float>* highpassParam = nullptr;
