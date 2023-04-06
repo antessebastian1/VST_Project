@@ -31,6 +31,7 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     shape1Enum.addItem("Saw",2);
     shape1Enum.addItem("Square",3);
     shape1Enum.addItem("Triangle", 4);
+    shape1Enum.addItem("Pulse", 5);
     shape1Enum.onChange = [this] { osc1ShapeChanged(); };
     shape1Enum.setSelectedId(1);
 
@@ -74,6 +75,7 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     shape2Enum.addItem("Saw", 2);
     shape2Enum.addItem("Square", 3);
     shape2Enum.addItem("Triangle", 4);
+    shape2Enum.addItem("Pulse", 5);
     shape2Enum.onChange = [this] { osc2ShapeChanged(); };
     shape2Enum.setSelectedId(4);
 
@@ -261,6 +263,8 @@ void WavetableSynthAntesAudioProcessorEditor::osc1ShapeChanged()
         break;
     case 4: audioProcessor.updateOsc1Shape(Shape::triangle);
         break;
+    case 5: audioProcessor.updateOsc1Shape(Shape::pulse);
+        break;
     }
 }
 
@@ -275,6 +279,8 @@ void WavetableSynthAntesAudioProcessorEditor::osc2ShapeChanged()
     case 3: audioProcessor.updateOsc2Shape(Shape::square);
         break;
     case 4: audioProcessor.updateOsc2Shape(Shape::triangle);
+        break;
+    case 5: audioProcessor.updateOsc2Shape(Shape::pulse);
         break;
     }
 }

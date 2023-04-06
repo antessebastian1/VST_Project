@@ -19,7 +19,6 @@ std::vector<float> WavetableSynth::generateWaveTable(Shape osc1Shape)
     }
     else if (osc1Shape == Shape::saw)
     {
-        const auto halfLength = (WAVETABLE_LENGTH / 2);
             for (auto i = 0; i < WAVETABLE_LENGTH; ++i) //for all floats in the wavetable (= positions in the wavetable)
             {
                 waveTable[i] = -1.0f + 2.0f*static_cast<float>(i)/ WAVETABLE_LENGTH;
@@ -45,6 +44,19 @@ std::vector<float> WavetableSynth::generateWaveTable(Shape osc1Shape)
         {
             //waveTable[i] = 1 / halfLength * ((i % WAVETABLE_LENGTH) - halfLength);
             waveTable[i] = -1.0f + 4.0f / WAVETABLE_LENGTH * abs(( static_cast<float>(i) - WAVETABLE_LENGTH / 4 % WAVETABLE_LENGTH) - WAVETABLE_LENGTH / 2.0f);
+        }
+    }
+    else if (osc1Shape == Shape::pulse)
+    {
+         //specifies for which fraction of the period the calue of the waveform is 1
+        for (auto i = 0; i < WAVETABLE_LENGTH; ++i) //for all floats in the wavetable (= positions in the wavetable)
+        {
+            if (i < static_cast<int>(WAVETABLE_LENGTH/8)) {
+                waveTable[i] = 1;
+            }
+            else {
+                waveTable[i] = -1;
+            }
         }
     }
     
