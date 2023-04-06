@@ -14,8 +14,7 @@
 //==============================================================================
 /**
 */
-class WavetableSynthAntesAudioProcessorEditor  : public juce::AudioProcessorEditor,
-                                                 public juce::Slider::Listener
+class WavetableSynthAntesAudioProcessorEditor  : public juce::AudioProcessorEditor
 
 {
 public:
@@ -26,35 +25,54 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
-    void sliderValueChanged(juce::Slider* slider) override;
 
 private:
-    juce::GroupComponent gainBox;
-    juce::Slider gainSlider;
-    juce::Label gainSliderLabel;
+    //osc1
+    juce::GroupComponent osc1Box;
+    //shape
+    juce::ComboBox shape1Enum;
+    //gain
+    juce::Slider osc1GainSlider;
+    juce::Label osc1GainSliderLabel;
+    std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> osc1GainAttachment;
+    //octave
+    juce::Slider osc1OctaveSlider;
+    juce::Label osc1OctaveSliderLabel;
+    std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> osc1OctaveAttachment;
+    void osc1ShapeChanged();
+    
+    //osc2
+    juce::GroupComponent osc2Box;
+    //shape
+    juce::ComboBox shape2Enum;
+    //gain
+    juce::Slider osc2GainSlider;
+    juce::Label osc2GainSliderLabel;
+    std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> osc2GainAttachment;
+    //octave
+    juce::Slider osc2OctaveSlider;
+    juce::Label osc2OctaveSliderLabel;
+    std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> osc2OctaveAttachment;
+    void osc2ShapeChanged();
 
-
-    juce::GroupComponent envBox;
-    juce::Slider envAmpSlider;
-    juce::Label envAmpSliderLabel;
-    juce::Slider envFreqSlider;
-    juce::Label envFreqSliderLabel;
-
+    //filter on the right side
     juce::GroupComponent filterBox;
     juce::Slider cutoffFreqSlider;
     std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> cutoffFreqAttachment;
     juce::Label cutoffFreqSliderLabel;
-
     juce::ToggleButton highpassButton;
     std::unique_ptr< juce::AudioProcessorValueTreeState::ButtonAttachment> highpassAttachment;
     juce::Label highpassButtonLabel;
 
-    juce::Label shape1EnumLabel{ {}, "Shape" };
-    juce::Label shape2EnumLabel{ {}, "Shape" };
-    juce::ComboBox shape1Enum;
-    juce::ComboBox shape2Enum;
-    void osc1ShapeChanged();
-    void osc2ShapeChanged();
+
+    //TOTAL gain on the left side
+    juce::GroupComponent gainBox;
+    juce::Slider gainSlider;
+    std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> gainAttachment;
+
+
+
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     WavetableSynthAntesAudioProcessor& audioProcessor;

@@ -76,15 +76,8 @@ void WavetableSynth::prepareToPlay(double sampleRate)
 }
 
 void WavetableSynth::processBlock(juce::AudioBuffer<float>& buffer,
-    juce::MidiBuffer& midiMessages, double envAmp, double envFreq)
+    juce::MidiBuffer& midiMessages)
 {   
-    this->envAmp = envAmp;
-    this->envFreq = envFreq;
-    this->envInc += envFreq;
-    envelope = envAmp * std::sinf(envInc);
-
-
-
     auto currentSample = 0;
 
     for (const auto midiMetadata : midiMessages) //For all midi messages
@@ -142,11 +135,11 @@ void WavetableSynth::render(juce::AudioBuffer<float>& buffer, int beginSample, i
     for (auto& oscillator : osc1) //for all oscilators
     {
         if (oscillator.isPlaying()) //if the oscillator is playing
-        {
-            //oscillator.detuneFrequency(envelope);
+        {   
+            oscillator.setOctave(osc1Octave);
             for (auto sample = beginSample; sample < endSample; ++sample) // for all samples of the oscillator
             {
-                firstChannel[sample] += oscillator.getSample(); //add up all samples to the firstChannel
+                firstChannel[sample] += oscillator.getSample() * osc1Gain; //add up all samples to the firstChannel
             }
         }
     }
@@ -154,11 +147,11 @@ void WavetableSynth::render(juce::AudioBuffer<float>& buffer, int beginSample, i
     for (auto& oscillator : osc2) //for all oscilators
     {
         if (oscillator.isPlaying()) //if the oscillator is playing
-        {
-            //oscillator.detuneFrequency(envelope);
+        {   
+            oscillator.setOctave(osc2Octave);
             for (auto sample = beginSample; sample < endSample; ++sample) // for all samples of the oscillator
             {
-                firstChannel[sample] += oscillator.getSample(); //add up all samples to the firstChannel
+                firstChannel[sample] += oscillator.getSample() * osc2Gain; //add up all samples to the firstChannel
             }
         }
     }
@@ -186,4 +179,11 @@ void WavetableSynth::updateOsc2Shape(Shape s) {
     {
         this->osc2.emplace_back(wavetable, sampleRate);
     }
+}
+
+void WavetableSynth::setParams(float osc1Gain, float osc1Octave, float osc2Gain, float osc2Octave) {
+    this->osc1Gain = osc1Gain;
+    this->osc1Octave = osc1Octave;
+    this->osc2Gain = osc2Gain;
+    this->osc2Octave = osc2Octave;
 }

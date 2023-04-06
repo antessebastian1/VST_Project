@@ -27,6 +27,7 @@ float WavetableOscillator::getSample()
 void WavetableOscillator::setFrequency(float frequency)
 {
     //indexincrement is the frequency times the size of the wavetable(=Wavelength) divided by the sample Rate    i = (f*w)/s
+    this->frequency = frequency;
     indexIncrement = frequency * static_cast<float>(waveTable.size())
         / static_cast<float>(sampleRate);
 }
@@ -34,6 +35,12 @@ void WavetableOscillator::setFrequency(float frequency)
 void WavetableOscillator::detuneFrequency(float deltaFreq)
 {
     indexIncrement = indexIncrement + deltaFreq * static_cast<float>(waveTable.size()) / static_cast<float>(sampleRate);
+}
+
+void WavetableOscillator::setOctave(int octave)
+{
+    indexIncrement = this->frequency * std::powf(2.0f,octave) * static_cast<float>(waveTable.size())
+        / static_cast<float>(sampleRate);
 }
 
 void WavetableOscillator::stop()

@@ -59,24 +59,31 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     void updateOsc1Shape(Shape osc1Shape);
-    void updateOsc2Shape(Shape osc1Shape);
+    void updateOsc2Shape(Shape osc2Shape);
 
     juce::AudioVisualiserComponent waveViewer;
-    double rawVolume;
 
-    double envAmp;
-    double envFreq;
 
 
 private:
     juce::AudioProcessorValueTreeState parameters;
+    //synth
+    std::atomic<float>* osc1GainParam = nullptr;
+    std::atomic<float>* osc1OctaveParam = nullptr;
+    std::atomic<float>* osc2GainParam = nullptr;
+    std::atomic<float>* osc2OctaveParam = nullptr;
+    
+    //filter
     std::atomic<float>* cutoffFreqParam = nullptr;
     std::atomic<float>* highpassParam = nullptr;
-    LowpassHighpassFilter filter;
+
+    //gain
+    std::atomic<float>* gainParam = nullptr;
 
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WavetableSynthAntesAudioProcessor)
 
     WavetableSynth synth;
+    LowpassHighpassFilter filter;
 };

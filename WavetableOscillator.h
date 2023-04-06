@@ -12,6 +12,7 @@ public:
 
     float getSample();
     void setFrequency(float frequency);
+    void setOctave(int octave);
     void detuneFrequency(float deltaFreq);
     void stop();
     bool isPlaying() const;
@@ -23,6 +24,7 @@ private:
     float indexIncrement = 0.f;
     std::vector<float> waveTable;
     double sampleRate;
+    float frequency;
 };
 
 

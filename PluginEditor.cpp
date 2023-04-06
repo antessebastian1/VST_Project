@@ -19,69 +19,95 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     setTitle("Operierer");
 
 
-    //boundary border for Gain
-    gainBox.setText("Gain");
-    gainBox.setColour(gainBox.outlineColourId, juce::Colours::red.withAlpha(0.2f));
-    gainBox.setColour(gainBox.textColourId, juce::Colours::red);
-    addAndMakeVisible(gainBox);
+    //osc1
+    addAndMakeVisible(osc1Box);
+    osc1Box.setText("OSC 1");
+    osc1Box.setColour(osc1Box.outlineColourId, juce::Colours::black.withAlpha(0.2f));
+    osc1Box.setColour(osc1Box.textColourId, juce::Colours::black);
 
-    //gain slider
-    gainSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
-    gainSlider.setColour(gainSlider.textBoxTextColourId, juce::Colours::black);
-    gainSlider.setRange(-48.0, 0.0);
-    gainSlider.setValue(-1.0);
-    gainSlider.addListener(this);
-    gainSlider.setColour(gainSlider.thumbColourId, juce::Colours::red); //Set Knob colour
-    gainSlider.setColour(gainSlider.trackColourId, juce::Colours::red.withAlpha(0.2f)); //set slider track colour
-    addAndMakeVisible(gainSlider);
+    //shape
+    addAndMakeVisible(shape1Enum);
+    shape1Enum.addItem("Sinus",1);
+    shape1Enum.addItem("Saw",2);
+    shape1Enum.addItem("Square",3);
+    shape1Enum.onChange = [this] { osc1ShapeChanged(); };
+    shape1Enum.setSelectedId(1);
 
-    gainSliderLabel.setText("Gain", juce::dontSendNotification);
-    gainSliderLabel.setColour(gainSliderLabel.textColourId, juce::Colours::black);
-    addAndMakeVisible(gainSliderLabel);
+    //gain
+    addAndMakeVisible(osc1GainSliderLabel);
+    osc1GainSliderLabel.setText("Gain", juce::dontSendNotification);
+    osc1GainSliderLabel.setColour(osc1GainSliderLabel.textColourId, juce::Colours::black);
 
-    //boundary border for Envelope
-    envBox.setText("LFO 1");
-    envBox.setColour(envBox.outlineColourId, juce::Colours::red.withAlpha(0.2f));
-    envBox.setColour(envBox.textColourId, juce::Colours::red);
-    addAndMakeVisible(envBox);
+    addAndMakeVisible(osc1GainSlider);
+    osc1GainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    osc1GainAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+        vts, "osc1_gain", osc1GainSlider));
+    osc1GainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    osc1GainSlider.setColour(osc1GainSlider.textBoxTextColourId, juce::Colours::black);
+    osc1GainSlider.setColour(osc1GainSlider.thumbColourId, juce::Colours::black); //Set Knob colour
+    osc1GainSlider.setColour(osc1GainSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
 
-    //envelope Amplitude slider
-    envAmpSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    envAmpSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
-    envAmpSlider.setColour(envAmpSlider.textBoxTextColourId, juce::Colours::black);
-    envAmpSlider.setRange(0.0, 200.0);
-    envAmpSlider.setValue(0.0);
-    envAmpSlider.addListener(this);
-    envAmpSlider.setColour(envAmpSlider.thumbColourId, juce::Colours::red); //Set Knob colour
-    envAmpSlider.setColour(envAmpSlider.trackColourId, juce::Colours::red.withAlpha(0.2f)); //set slider track colour
-    addAndMakeVisible(envAmpSlider);
+    //octave
+    addAndMakeVisible(osc1OctaveSliderLabel);
+    osc1OctaveSliderLabel.setText("Octave", juce::dontSendNotification);
+    osc1OctaveSliderLabel.setColour(osc1OctaveSliderLabel.textColourId, juce::Colours::black);
 
-    envAmpSliderLabel.setText("Amp", juce::dontSendNotification);
-    envAmpSliderLabel.setColour(envAmpSliderLabel.textColourId, juce::Colours::black);
-    addAndMakeVisible(envAmpSliderLabel);
-
-    //envelope Frequency slider
-    envFreqSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    envFreqSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
-    envFreqSlider.setColour(envFreqSlider.textBoxTextColourId, juce::Colours::black);
-    envFreqSlider.setRange(0.0, 1.0);
-    envFreqSlider.setValue(0.0);
-    envFreqSlider.addListener(this);
-    envFreqSlider.setColour(envFreqSlider.thumbColourId, juce::Colours::red); //Set Knob colour
-    envFreqSlider.setColour(envFreqSlider.trackColourId, juce::Colours::red.withAlpha(0.2f)); //set slider track colour
-    addAndMakeVisible(envFreqSlider);
-
-    envFreqSliderLabel.setText("Freq", juce::dontSendNotification);
-    envFreqSliderLabel.setColour(envFreqSliderLabel.textColourId, juce::Colours::black);
-    addAndMakeVisible(envFreqSliderLabel);
+    addAndMakeVisible(osc1OctaveSlider);
+    osc1OctaveSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    osc1OctaveAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+        vts, "osc1_octave", osc1OctaveSlider));
+    osc1OctaveSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    osc1OctaveSlider.setColour(osc1OctaveSlider.textBoxTextColourId, juce::Colours::black);
+    osc1OctaveSlider.setColour(osc1OctaveSlider.thumbColourId, juce::Colours::black); //Set Knob colour
+    osc1OctaveSlider.setColour(osc1OctaveSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
 
 
-    //lowpassHighpass filter
-    //boundary border for Envelope
+    //osc2
+    addAndMakeVisible(osc2Box);
+    osc2Box.setText("OSC 2");
+    osc2Box.setColour(osc2Box.outlineColourId, juce::Colours::black.withAlpha(0.2f));
+    osc2Box.setColour(osc2Box.textColourId, juce::Colours::black);
+
+    addAndMakeVisible(shape2Enum);
+    shape2Enum.addItem("Sinus", 1);
+    shape2Enum.addItem("Saw", 2);
+    shape2Enum.addItem("Square", 3);
+    shape2Enum.onChange = [this] { osc2ShapeChanged(); };
+    shape2Enum.setSelectedId(1);
+
+    addAndMakeVisible(osc2GainSliderLabel);
+    osc2GainSliderLabel.setText("Gain", juce::dontSendNotification);
+    osc2GainSliderLabel.setColour(osc2GainSliderLabel.textColourId, juce::Colours::black);
+
+    addAndMakeVisible(osc2GainSlider);
+    osc2GainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    osc2GainAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+        vts, "osc2_gain", osc2GainSlider));
+    osc2GainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    osc2GainSlider.setColour(osc2GainSlider.textBoxTextColourId, juce::Colours::black);
+    osc2GainSlider.setColour(osc2GainSlider.thumbColourId, juce::Colours::black); //Set Knob colour
+    osc2GainSlider.setColour(osc2GainSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
+
+    //octave
+    addAndMakeVisible(osc2OctaveSliderLabel);
+    osc2OctaveSliderLabel.setText("Octave", juce::dontSendNotification);
+    osc2OctaveSliderLabel.setColour(osc2OctaveSliderLabel.textColourId, juce::Colours::black);
+
+    addAndMakeVisible(osc2OctaveSlider);
+    osc2OctaveSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    osc2OctaveAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+        vts, "osc2_octave", osc2OctaveSlider));
+    osc2OctaveSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    osc2OctaveSlider.setColour(osc2OctaveSlider.textBoxTextColourId, juce::Colours::black);
+    osc2OctaveSlider.setColour(osc2OctaveSlider.thumbColourId, juce::Colours::black); //Set Knob colour
+    osc2OctaveSlider.setColour(osc2OctaveSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
+
+
+
+    //Filter
     filterBox.setText("Filter");
-    filterBox.setColour(filterBox.outlineColourId, juce::Colours::red.withAlpha(0.2f));
-    filterBox.setColour(filterBox.textColourId, juce::Colours::red);
+    filterBox.setColour(filterBox.outlineColourId, juce::Colours::black.withAlpha(0.2f));
+    filterBox.setColour(filterBox.textColourId, juce::Colours::black);
     addAndMakeVisible(filterBox);
 
 
@@ -91,8 +117,8 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
         vts, "cutoff_frequency", cutoffFreqSlider));
     cutoffFreqSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
     cutoffFreqSlider.setColour(cutoffFreqSlider.textBoxTextColourId, juce::Colours::black);
-    cutoffFreqSlider.setColour(cutoffFreqSlider.thumbColourId, juce::Colours::red); //Set Knob colour
-    cutoffFreqSlider.setColour(cutoffFreqSlider.trackColourId, juce::Colours::red.withAlpha(0.2f)); //set slider track colour
+    cutoffFreqSlider.setColour(cutoffFreqSlider.thumbColourId, juce::Colours::black); //Set Knob colour
+    cutoffFreqSlider.setColour(cutoffFreqSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
 
 
     addAndMakeVisible(cutoffFreqSliderLabel);
@@ -100,7 +126,7 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     cutoffFreqSliderLabel.setColour(cutoffFreqSliderLabel.textColourId, juce::Colours::black);
 
     addAndMakeVisible(highpassButton);
-    highpassButton.setColour(highpassButton.tickColourId, juce::Colours::red);
+    highpassButton.setColour(highpassButton.tickColourId, juce::Colours::black);
     highpassButton.setColour(highpassButton.tickDisabledColourId, juce::Colours::black);
 
     highpassAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(
@@ -111,30 +137,27 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     highpassButtonLabel.setColour(highpassButtonLabel.textColourId, juce::Colours::black);
 
 
+    //Gainbox
+    gainBox.setText("Master");
+    gainBox.setColour(gainBox.outlineColourId, juce::Colours::black.withAlpha(0.2f));
+    gainBox.setColour(gainBox.textColourId, juce::Colours::black);
+    addAndMakeVisible(gainBox);
 
-    addAndMakeVisible(shape1EnumLabel);
-    addAndMakeVisible(shape1Enum);
-    shape1Enum.addItem("Sinus",1);
-    shape1Enum.addItem("Saw",2);
-    shape1Enum.addItem("Square",3);
-
-    shape1Enum.onChange = [this] { osc1ShapeChanged(); };
-    shape1Enum.setSelectedId(1);
-
-    addAndMakeVisible(shape2EnumLabel);
-    addAndMakeVisible(shape2Enum);
-    shape2Enum.addItem("Sinus", 1);
-    shape2Enum.addItem("Saw", 2);
-    shape2Enum.addItem("Square", 3);
-
-    shape2Enum.onChange = [this] { osc2ShapeChanged(); };
-    shape2Enum.setSelectedId(1);
-
+    //gain slider
+    gainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    gainSlider.setColour(gainSlider.textBoxTextColourId, juce::Colours::black);
+    gainSlider.setValue(-1.0);
+    gainSlider.setColour(gainSlider.thumbColourId, juce::Colours::black); //Set Knob colour
+    gainSlider.setColour(gainSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
+    gainAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+        vts, "gain", gainSlider));
+    addAndMakeVisible(gainSlider);
 
 
 
     //wave Viewer
-    audioProcessor.waveViewer.setColours(juce::Colours::black, juce::Colours::red.withAlpha(0.5f));
+    audioProcessor.waveViewer.setColours(juce::Colours::black, juce::Colours::limegreen.withAlpha(0.5f));
     audioProcessor.waveViewer.setTitle("Wave Visualizer");
     addAndMakeVisible(audioProcessor.waveViewer);
 
@@ -149,7 +172,7 @@ WavetableSynthAntesAudioProcessorEditor::~WavetableSynthAntesAudioProcessorEdito
 void WavetableSynthAntesAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    getLookAndFeel().setColour(juce::ResizableWindow::backgroundColourId,juce::Colours::beige);
+    getLookAndFeel().setColour(juce::ResizableWindow::backgroundColourId,juce::Colours::lightgrey);
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 
     
@@ -159,74 +182,70 @@ void WavetableSynthAntesAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
+    auto waveViewerHeight = 0.5f;
+
+
 
     auto leftMargin = getHeight() * 0.06125;
     auto topMargin = getHeight() * 0.06125;
+
+
     auto groupWidth = getWidth() * 0.06125;
-    auto groupHeight = getHeight() * 0.5f - topMargin*2;
+    auto groupHeight = getHeight() - waveViewerHeight * getHeight() - topMargin * 2;
     auto sliderWidth = 0.8 * groupWidth;
     auto sliderHeight = 0.8 * groupHeight;
-    
-    auto waveViewerHeight = 0.5f;
+   
     auto bottomMargin = getHeight() - waveViewerHeight - topMargin;
+
+    auto filterBoxXPos = getWidth() - leftMargin - 3 * groupWidth;
+
+
+    
+
+ 
+    //osc1 Box
+    osc1Box.setBounds(leftMargin, topMargin, 2 * groupWidth, groupHeight);
+    //shapeEnum
+    shape1Enum.setBounds(leftMargin + 0.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderWidth/4);
+    //gain slider
+    osc1GainSlider.setBounds(leftMargin + 1.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderWidth);
+    osc1GainSliderLabel.setBounds(leftMargin + 1.1 * groupWidth + 0.5f * sliderWidth - 20, topMargin + 0.1 * groupHeight - 15, sliderWidth, 20);
+    //octave slider
+    osc1OctaveSlider.setBounds(leftMargin + 1.1 * groupWidth, topMargin + 1.2* sliderWidth + 0.1 * groupHeight, sliderWidth, sliderWidth);
+    osc1OctaveSliderLabel.setBounds(leftMargin + 1.1 * groupWidth + 0.5f * sliderWidth - 30, topMargin + 1.2 * sliderWidth + 0.1 * groupHeight - 15, sliderWidth, 20);
+
+    //osc2 Box
+    osc2Box.setBounds(leftMargin + 2* groupWidth, topMargin, 2 * groupWidth, groupHeight);
+    //shapeEnum
+    shape2Enum.setBounds(leftMargin + 2.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderWidth/4);
+    //gain slider
+    osc2GainSlider.setBounds(leftMargin + 3.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderWidth);
+    osc2GainSliderLabel.setBounds(leftMargin + 3.1 * groupWidth + 0.5f * sliderWidth - 20, topMargin + 0.1 * groupHeight - 15, sliderWidth, 20);
+    //octave slider
+    osc2OctaveSlider.setBounds(leftMargin + 3.1 * groupWidth, topMargin + 1.2 * sliderWidth + 0.1 * groupHeight, sliderWidth, sliderWidth);
+    osc2OctaveSliderLabel.setBounds(leftMargin + 3.1 * groupWidth + 0.5f * sliderWidth - 30, topMargin + 1.2 * sliderWidth + 0.1 * groupHeight - 15, sliderWidth, 20);
+
+
+    //LopassHighpassFilter
+    filterBox.setBounds(filterBoxXPos, topMargin, groupWidth * 2, groupHeight);
+    //cutoff slider
+    cutoffFreqSlider.setBounds(filterBoxXPos + 0.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
+    cutoffFreqSliderLabel.setBounds(filterBoxXPos + 0.1 * groupWidth + 0.5f * sliderWidth - 20, topMargin + 0.1 * groupHeight - 15, sliderWidth, 20);
+    //highpass button
+    highpassButton.setBounds(filterBoxXPos + 1.1 * groupWidth + 0.5f * sliderWidth, topMargin + 0.1 * groupHeight, sliderWidth, 0.1 * groupHeight);
+    highpassButtonLabel.setBounds(filterBoxXPos + 1.1 * groupWidth + 0.5f * sliderWidth - 20, topMargin + 0.1 * groupHeight - 15, sliderWidth, 20);
 
 
     //gain box
-    gainBox.setBounds(leftMargin, topMargin, groupWidth, groupHeight);
+    gainBox.setBounds(getWidth() - leftMargin - groupWidth, topMargin, groupWidth, groupHeight);
     //gain slider
-    gainSlider.setBounds(leftMargin + 0.1*groupWidth, topMargin + 0.1*groupHeight, sliderWidth, sliderHeight);
-    //gain label
-    gainSliderLabel.setBounds(leftMargin + 0.1 * groupWidth, topMargin + 0.1 * groupHeight - 20, sliderWidth, 20);
-
-    //env box
-    envBox.setBounds(leftMargin + 2 * groupWidth, topMargin, groupWidth*2, groupHeight);
-    //env Slider
-    envAmpSlider.setBounds((leftMargin + 2 * groupWidth) + 0.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
-    envAmpSliderLabel.setBounds((leftMargin + 2 * groupWidth) + 0.1 * groupWidth + 0.5f * sliderWidth - 15, topMargin + 0.1 * groupHeight - 20, sliderWidth, 20);
-
-    envFreqSlider.setBounds((leftMargin + 2 * groupWidth) + 1.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
-    envFreqSliderLabel.setBounds((leftMargin + 2 * groupWidth) + 1.1 * groupWidth + 0.5f * sliderWidth - 20, topMargin + 0.1 * groupHeight - 20, sliderWidth, 20);
-    //LopassHighpassFilter
-    filterBox.setBounds(leftMargin + 5 * groupWidth, topMargin, groupWidth * 2, groupHeight);
-    //cutoff slider
-    cutoffFreqSlider.setBounds((leftMargin + 5 * groupWidth) + 0.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
-    cutoffFreqSliderLabel.setBounds((leftMargin + 5 * groupWidth) + 0.1 * groupWidth + 0.5f * sliderWidth - 20, topMargin + 0.1 * groupHeight - 20, sliderWidth, 20);
-    //highpass button
-    highpassButton.setBounds((leftMargin + 5 * groupWidth) + 1.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
-    highpassButtonLabel.setBounds((leftMargin + 5 * groupWidth) + 1.1 * groupWidth - 40, topMargin + 0.1 * groupHeight - 20 + 0.5*sliderHeight, sliderWidth, 20);
-
-
-    shape1Enum.setBounds((leftMargin + 5 * groupWidth) + 3.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
-    shape1EnumLabel.setBounds((leftMargin + 5 * groupWidth) + 3.1 * groupWidth - 40, topMargin + 0.1 * groupHeight - 20 + 0.5 * sliderHeight, sliderWidth, 20);
-    shape2Enum.setBounds((leftMargin + 5 * groupWidth) + 5.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderHeight);
-    shape2EnumLabel.setBounds((leftMargin + 5 * groupWidth) + 5.1 * groupWidth - 40, topMargin + 0.1 * groupHeight - 20 + 0.5 * sliderHeight, sliderWidth, 20);
-
-
-
+    gainSlider.setBounds(getWidth() - leftMargin - groupWidth + 0.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderWidth);
 
 
     //wave visualizer // on bottom center
     audioProcessor.waveViewer.setBounds( 0.0, waveViewerHeight * getHeight(), getWidth(), getHeight() * waveViewerHeight);
 }   
 
-
-void WavetableSynthAntesAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
-{
-    if (slider == &gainSlider)
-    {
-        audioProcessor.rawVolume = pow(10, gainSlider.getValue() / 20);
-    }
-
-    if (slider == &envAmpSlider)
-    {
-        audioProcessor.envAmp = envAmpSlider.getValue();
-    }
-
-    if (slider == &envFreqSlider)
-    {
-        audioProcessor.envFreq = envFreqSlider.getValue();
-    }
-}
 
 void WavetableSynthAntesAudioProcessorEditor::osc1ShapeChanged()
 {
