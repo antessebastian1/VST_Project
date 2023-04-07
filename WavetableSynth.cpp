@@ -162,7 +162,7 @@ void WavetableSynth::render(juce::AudioBuffer<float>& buffer, int beginSample, i
             oscillator.setOctaveAndCent(osc1Octave, osc1Cent);
             for (auto sample = beginSample; sample < endSample; ++sample) // for all samples of the oscillator
             {
-                firstChannel[sample] += oscillator.getSample() * osc1Gain * adsr.getNextSample(); //add up all samples to the firstChannel
+                firstChannel[sample] += oscillator.getSample() * osc1Gain; //add up all samples to the firstChannel
             }
         }
     }

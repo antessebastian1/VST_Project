@@ -188,7 +188,7 @@ void WavetableSynthAntesAudioProcessor::processBlock (juce::AudioBuffer<float>& 
 
     //apply lowpassHighpassFilter
     //const auto cutoffFreq = cutoffFreqParam->load();20.0f,20000.f
-    const auto cutoffFreq = 20.0f + pow(2,synth.getEnvSample()*10);
+    const auto cutoffFreq = 20.0f + synth.getEnvSample()*19980.0f;
     const auto highpass = *highpassParam < 0.5f ? false : true;
     filter.setCutoffFrequency(cutoffFreq);
     filter.setHighpass(highpass);
