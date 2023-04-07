@@ -63,6 +63,26 @@ private:
     std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> osc2CentAttachment;
     void osc2ShapeChanged();
 
+    //Envelope ADSR
+    juce::GroupComponent envBox;
+    //attack
+    juce::Slider attackSlider;
+    juce::Label attackSliderLabel;
+    std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> attackAttachment;
+    //decay
+    juce::Slider decaySlider;
+    juce::Label decaySliderLabel;
+    std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> decayAttachment;
+    //sustain
+    juce::Slider sustainSlider;
+    juce::Label sustainSliderLabel;
+    std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> sustainAttachment;
+    //release
+    juce::Slider releaseSlider;
+    juce::Label releaseSliderLabel;
+    std::unique_ptr < juce::AudioProcessorValueTreeState::SliderAttachment> releaseAttachment;
+
+
     //filter on the right side
     juce::GroupComponent filterBox;
     juce::Slider cutoffFreqSlider;

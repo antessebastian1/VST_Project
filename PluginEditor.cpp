@@ -135,6 +135,64 @@ WavetableSynthAntesAudioProcessorEditor::WavetableSynthAntesAudioProcessorEditor
     osc2CentSlider.setColour(osc2CentSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
 
 
+    //ADSR ENV
+    envBox.setText("ENV");
+    envBox.setColour(envBox.outlineColourId, juce::Colours::black.withAlpha(0.2f));
+    envBox.setColour(envBox.textColourId, juce::Colours::black);
+    addAndMakeVisible(envBox);
+
+    //attack
+    addAndMakeVisible(attackSlider);
+    attackSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    attackAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+        vts, "attack", attackSlider));
+    attackSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    attackSlider.setColour(attackSlider.textBoxTextColourId, juce::Colours::black);
+    attackSlider.setColour(attackSlider.thumbColourId, juce::Colours::black); //Set Knob colour
+    attackSlider.setColour(attackSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
+    addAndMakeVisible(attackSliderLabel);
+    attackSliderLabel.setText("Attack", juce::dontSendNotification);
+    attackSliderLabel.setColour(attackSliderLabel.textColourId, juce::Colours::black);
+
+    //decay
+    addAndMakeVisible(decaySlider);
+    decaySlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    decayAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+        vts, "decay", decaySlider));
+    decaySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    decaySlider.setColour(decaySlider.textBoxTextColourId, juce::Colours::black);
+    decaySlider.setColour(decaySlider.thumbColourId, juce::Colours::black); //Set Knob colour
+    decaySlider.setColour(decaySlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
+    addAndMakeVisible(decaySliderLabel);
+    decaySliderLabel.setText("Decay", juce::dontSendNotification);
+    decaySliderLabel.setColour(decaySliderLabel.textColourId, juce::Colours::black);
+
+    //sustain
+    addAndMakeVisible(sustainSlider);
+    sustainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    sustainAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+        vts, "sustain", sustainSlider));
+    sustainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    sustainSlider.setColour(sustainSlider.textBoxTextColourId, juce::Colours::black);
+    sustainSlider.setColour(sustainSlider.thumbColourId, juce::Colours::black); //Set Knob colour
+    sustainSlider.setColour(sustainSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
+    addAndMakeVisible(sustainSliderLabel);
+    sustainSliderLabel.setText("Sustain", juce::dontSendNotification);
+    sustainSliderLabel.setColour(sustainSliderLabel.textColourId, juce::Colours::black);
+
+    //release
+    addAndMakeVisible(releaseSlider);
+    releaseSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    releaseAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+        vts, "release", releaseSlider));
+    releaseSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    releaseSlider.setColour(releaseSlider.textBoxTextColourId, juce::Colours::black);
+    releaseSlider.setColour(releaseSlider.thumbColourId, juce::Colours::black); //Set Knob colour
+    releaseSlider.setColour(releaseSlider.trackColourId, juce::Colours::black.withAlpha(0.2f)); //set slider track colour
+    addAndMakeVisible(releaseSliderLabel);
+    releaseSliderLabel.setText("Release", juce::dontSendNotification);
+    releaseSliderLabel.setColour(releaseSliderLabel.textColourId, juce::Colours::black);
+
 
     //Filter
     filterBox.setText("Filter");
@@ -214,7 +272,7 @@ void WavetableSynthAntesAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-    auto waveViewerHeight = 0.5f;
+    auto waveViewerHeight = 0.4f;
 
 
 
@@ -264,6 +322,24 @@ void WavetableSynthAntesAudioProcessorEditor::resized()
     osc2CentSliderLabel.setBounds(leftMargin + 3.1 * groupWidth + 0.5f * sliderWidth - 30, topMargin + 2.4 * sliderWidth + 0.1 * groupHeight - 15, sliderWidth, 20);
 
 
+    //env Box
+    envBox.setBounds(leftMargin + 4 * groupWidth, topMargin,groupWidth, groupHeight);
+    //attack
+    attackSlider.setBounds(leftMargin + 4.1 * groupWidth, topMargin + 0.1 * groupHeight, sliderWidth, sliderWidth);
+    attackSliderLabel.setBounds(leftMargin + 4.1 * groupWidth + 0.5f * sliderWidth - 20, topMargin + 0.1 * groupHeight - 15, sliderWidth, 20);
+    //decay
+    decaySlider.setBounds(leftMargin + 4.1 * groupWidth, topMargin + 1.2 * sliderWidth + 0.1 * groupHeight, sliderWidth, sliderWidth);
+    decaySliderLabel.setBounds(leftMargin + 4.1 * groupWidth + 0.5f * sliderWidth - 30, topMargin + 1.2 * sliderWidth + 0.1 * groupHeight - 15, sliderWidth, 20);
+    //sustain
+    sustainSlider.setBounds(leftMargin + 4.1 * groupWidth, topMargin + 2.4 * sliderWidth + 0.1 * groupHeight, sliderWidth, sliderWidth);
+    sustainSliderLabel.setBounds(leftMargin + 4.1 * groupWidth + 0.5f * sliderWidth - 30, topMargin + 2.4 * sliderWidth + 0.1 * groupHeight - 15, sliderWidth, 20);
+    //release
+    releaseSlider.setBounds(leftMargin + 4.1 * groupWidth, topMargin + 3.6 * sliderWidth + 0.1 * groupHeight, sliderWidth, sliderWidth);
+    releaseSliderLabel.setBounds(leftMargin + 4.1 * groupWidth + 0.5f * sliderWidth - 30, topMargin + 3.6 * sliderWidth + 0.1 * groupHeight - 15, sliderWidth, 20);
+
+
+
+
     //LopassHighpassFilter
     filterBox.setBounds(filterBoxXPos, topMargin, groupWidth * 2, groupHeight);
     //cutoff slider
@@ -281,7 +357,7 @@ void WavetableSynthAntesAudioProcessorEditor::resized()
 
 
     //wave visualizer // on bottom center
-    audioProcessor.waveViewer.setBounds( 0.0, waveViewerHeight * getHeight(), getWidth(), getHeight() * waveViewerHeight);
+    audioProcessor.waveViewer.setBounds( 0.0, getHeight() - waveViewerHeight * getHeight(), getWidth(), getHeight() * waveViewerHeight);
 }   
 
 

@@ -63,8 +63,6 @@ public:
 
     juce::AudioVisualiserComponent waveViewer;
 
-
-
 private:
     juce::AudioProcessorValueTreeState parameters;
     //synth
@@ -74,6 +72,12 @@ private:
     std::atomic<float>* osc2GainParam = nullptr;
     std::atomic<float>* osc2OctaveParam = nullptr;
     std::atomic<float>* osc2CentParam = nullptr;
+
+    //env
+    std::atomic<float>* attackParam = nullptr;
+    std::atomic<float>* decayParam = nullptr;
+    std::atomic<float>* sustainParam = nullptr;
+    std::atomic<float>* releaseParam = nullptr;
         
     //filter
     std::atomic<float>* cutoffFreqParam = nullptr;

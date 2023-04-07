@@ -1,4 +1,5 @@
 #include "WavetableSynth.h"
+#include "PluginProcessor.h"
 
 std::vector<float> WavetableSynth::generateWaveTable(Shape osc1Shape)
 {
@@ -89,7 +90,7 @@ void WavetableSynth::initializeOscillators()
 void WavetableSynth::prepareToPlay(double sampleRate)
 {
     this->sampleRate = sampleRate; //set samplerate
-
+    this->setADSRSampleRate(sampleRate);
     initializeOscillators(); //initialize Oscillators to be ready
 }
 
@@ -127,15 +128,19 @@ void WavetableSynth::handleMidiEvent(const juce::MidiMessage& midiMessage)
         const auto frequency = midiNoteNumberToFrequency(oscillatorId); //calculate frequency from noteNumber
         osc1[oscillatorId].setFrequency(frequency); //set the frequency of the corresponding oscillator to frequency from notenumber
         osc2[oscillatorId].setFrequency(frequency);
+        adsr.reset();
+        adsr.noteOn();
     }
     else if (midiMessage.isNoteOff()) //if note off
     {
         const auto oscillatorId = midiMessage.getNoteNumber(); //get the number of the note
         osc1[oscillatorId].stop(); //stop corresponding oscillator
         osc2[oscillatorId].stop();
+        adsr.noteOff();
     }
     else if (midiMessage.isAllNotesOff()) //if all notes are off
     {
+        adsr.noteOff();
         for (auto& oscillator : osc1)
         {
             oscillator.stop(); //stop all oscillators
@@ -157,7 +162,7 @@ void WavetableSynth::render(juce::AudioBuffer<float>& buffer, int beginSample, i
             oscillator.setOctaveAndCent(osc1Octave, osc1Cent);
             for (auto sample = beginSample; sample < endSample; ++sample) // for all samples of the oscillator
             {
-                firstChannel[sample] += oscillator.getSample() * osc1Gain; //add up all samples to the firstChannel
+                firstChannel[sample] += oscillator.getSample() * osc1Gain * adsr.getNextSample(); //add up all samples to the firstChannel
             }
         }
     }
@@ -199,11 +204,26 @@ void WavetableSynth::updateOsc2Shape(Shape s) {
     }
 }
 
-void WavetableSynth::setParams(float osc1Gain, float osc1Octave, float osc1Cent, float osc2Gain, float osc2Octave, float osc2Cent) {
+void WavetableSynth::setParams(float osc1Gain, float osc1Octave, float osc1Cent, float osc2Gain, float osc2Octave, float osc2Cent, float attack, float decay, float sustain, float release) {
     this->osc1Gain = osc1Gain;
     this->osc1Octave = osc1Octave;
     this->osc1Cent = osc1Cent;
     this->osc2Gain = osc2Gain;
     this->osc2Octave = osc2Octave;
     this->osc2Cent = osc2Cent;
+    //set env params
+    this->adsrParams.attack = attack;
+    this->adsrParams.decay = decay;
+    this->adsrParams.sustain = sustain;
+    this->adsrParams.release = release;
+    this->adsr.setParameters(this->adsrParams);
+}
+void WavetableSynth::setADSRSampleRate(double sampleRate)
+{
+    this->adsr.setSampleRate(sampleRate);
+}
+
+float WavetableSynth::getEnvSample()
+{
+    return this->adsr.getNextSample();
 }

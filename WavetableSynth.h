@@ -3,6 +3,7 @@
 
 #include "WavetableOscillator.h"
 
+
 enum Shape
 {
     sinus,
@@ -19,7 +20,8 @@ public:
     void processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages);
     void updateOsc1Shape(Shape s);
     void updateOsc2Shape(Shape s);
-    void setParams(float osc1Gain, float osc1Octave, float osc1Cent, float osc2Gain, float osc2Octave, float osc2Cent);
+    void setParams(float osc1Gain, float osc1Octave, float osc1Cent, float osc2Gain, float osc2Octave, float osc2Cent, float attack, float decay, float sustain, float release);
+    float getEnvSample();
 private:
     static std::vector<float> generateWaveTable(Shape shape);
     static float midiNoteNumberToFrequency(int midiNoteNumber);
@@ -37,7 +39,10 @@ private:
     float osc2Gain;
     float osc2Octave;
     float osc2Cent;
-
-    Shape osc1Shape;
+    //envelope
+    juce::ADSR adsr;
+    juce::ADSR::Parameters adsrParams;
+    void setADSRSampleRate(double sampleRate);
+    
 };
 
